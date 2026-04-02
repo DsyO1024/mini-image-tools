@@ -1,0 +1,116 @@
+<view class="container">
+  <!-- 选择图片 -->
+  <view class="section" wx:if="{{!imageSrc}}">
+    <view class="upload-area" bindtap="chooseImage">
+      <view class="upload-icon">+</view>
+      <text class="upload-text">从相册选择图片</text>
+    </view>
+  </view>
+
+  <!-- 图片预览 & Canvas -->
+  <view class="section" wx:if="{{imageSrc}}">
+    <view class="canvas-wrapper" style="width:{{canvasWidth}}px;height:{{canvasHeight}}px;">
+      <canvas
+        id="mosaicCanvas"
+        type="2d"
+        style="width:{{canvasWidth}}px;height:{{canvasHeight}}px;"
+        bindtouchstart="onCanvasTouchStart"
+        bindtouchmove="onCanvasTouchMove"
+        bindtouchend="onCanvasTouchEnd"
+      ></canvas>
+      <view class="mosaic-hint">
+        <text>用手指涂抹需要打码的区域</text>
+      </view>
+    </view>
+    <view class="re-select" bindtap="reSelectImage">
+      <text>重新选择图片</text>
+    </view>
+  </view>
+
+  <!-- 马赛克设置 -->
+  <view class="section config-panel" wx:if="{{imageSrc}}">
+    <view class="config-title">马赛克设置</view>
+
+    <!-- 模式切换 -->
+    <view class="config-item">
+      <text class="config-label">打码模式</text>
+      <view class="mode-tabs">
+        <view class="mode-tab {{mosaicMode === 'pixel' ? 'active' : ''}}" data-mode="pixel" bindtap="onModeChange">
+          <text>像素马赛克</text>
+        </view>
+        <view class="mode-tab {{mosaicMode === 'emoji' ? 'active' : ''}}" data-mode="emoji" bindtap="onModeChange">
+          <text>Emoji贴图</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 像素马赛克大小 -->
+    <view class="config-item" wx:if="{{mosaicMode === 'pixel'}}">
+      <text class="config-label">马赛克大小: {{mosaicSize}}</text>
+      <slider
+        min="5" max="40"
+        value="{{mosaicSize}}"
+        activeColor="#f5576c"
+        bindchange="onMosaicSizeChange"
+      />
+    </view>
+
+    <!-- Emoji 选择 -->
+    <view class="config-item" wx:if="{{mosaicMode === 'emoji'}}">
+      <text class="config-label">选择Emoji</text>
+      <view class="emoji-list">
+        <view
+          wx:for="{{emojiOptions}}"
+          wx:key="*this"
+          class="emoji-item {{selectedEmoji === item ? 'selected' : ''}}"
+          data-emoji="{{item}}"
+          bindtap="onEmojiTap"
+        >
+          <text>{{item}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- Emoji 大小 -->
+    <view class="config-item" wx:if="{{mosaicMode === 'emoji'}}">
+      <text class="config-label">Emoji大小: {{emojiSize}}</text>
+      <slider
+        min="20" max="80"
+        value="{{emojiSize}}"
+        activeColor="#f5576c"
+        bindchange="onEmojiSizeChange"
+      />
+    </view>
+
+    <view class="config-item">
+      <view class="clear-btn" bindtap="clearMosaic">
+        <text>清除涂抹</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="section action-bar" wx:if="{{imageSrc}}">
+    <button class="btn-primary" bindtap="applyMosaic" disabled="{{processing}}">
+      {{processing ? '处理中...' : '生成马赛克图片'}}
+    </button>
+  </view>
+
+  <!-- 结果弹窗 -->
+  <view class="result-mask" wx:if="{{showResult}}" bindtap="closeResult">
+    <view class="result-panel" catchtap="">
+      <view class="result-header">
+        <text class="result-title">处理完成</text>
+        <view class="result-close" bindtap="closeResult"><text>X</text></view>
+      </view>
+      <view class="result-image-wrap">
+        <image src="{{resultImageSrc}}" class="result-image" mode="aspectFit" bindtap="previewResult" />
+      </view>
+      <view class="result-tip"><text>点击图片可预览大图</text></view>
+      <view class="result-actions">
+        <button class="btn-save" bindtap="saveToAlbum">保存到相册</button>
+        <button class="btn-redo" bindtap="reSelectImage">处理其他图片</button>
+      </view>
+    </view>
+  </view>
+</view>

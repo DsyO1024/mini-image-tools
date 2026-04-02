@@ -27,9 +27,19 @@
       "disablePlugins": [],
       "outputPath": ""
     },
-    "condition": false
+    "condition": false,
+    "compileWorklet": false,
+    "packNpmManually": false,
+    "packNpmRelationList": [],
+    "minifyWXSS": true,
+    "minifyWXML": true,
+    "localPlugins": false,
+    "disableUseStrict": false,
+    "useCompilerPlugins": false,
+    "swc": false,
+    "disableSWC": true
   },
-  "appid": "touristappid",
+  "appid": "wx6f520a0c7922572e",
   "projectname": "mini-image-tools",
   "libVersion": "3.3.4",
   "simulatorType": "wechat",

@@ -1,7 +1,9 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/watermark/index"
+    "pages/text-watermark/index",
+    "pages/mosaic/index",
+    "pages/icon-watermark/index"
   ],
   "window": {
     "navigationBarBackgroundColor": "#ffffff",

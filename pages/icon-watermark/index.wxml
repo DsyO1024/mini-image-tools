@@ -1,0 +1,92 @@
+<view class="container">
+  <!-- 选择图片 -->
+  <view class="section" wx:if="{{!imageSrc}}">
+    <view class="upload-area" bindtap="chooseImage">
+      <view class="upload-icon">+</view>
+      <text class="upload-text">从相册选择图片</text>
+    </view>
+  </view>
+
+  <!-- 图片预览 & Canvas -->
+  <view class="section" wx:if="{{imageSrc}}">
+    <view class="canvas-wrapper" style="width:{{canvasWidth}}px;height:{{canvasHeight}}px;">
+      <canvas
+        id="iconCanvas"
+        type="2d"
+        style="width:{{canvasWidth}}px;height:{{canvasHeight}}px;"
+      ></canvas>
+    </view>
+    <view class="re-select" bindtap="reSelectImage">
+      <text>重新选择图片</text>
+    </view>
+  </view>
+
+  <!-- 图标水印设置 -->
+  <view class="section config-panel" wx:if="{{imageSrc}}">
+    <view class="config-title">图标水印设置</view>
+
+    <view class="config-item">
+      <text class="config-label">水印图标</text>
+      <view class="icon-select" bindtap="chooseIcon">
+        <image wx:if="{{iconSrc}}" src="{{iconSrc}}" class="icon-preview" mode="aspectFit" />
+        <text wx:else class="icon-select-text">+ 选择图标</text>
+      </view>
+    </view>
+
+    <view class="config-item">
+      <text class="config-label">图标大小: {{iconSize}}</text>
+      <slider
+        min="20" max="200"
+        value="{{iconSize}}"
+        activeColor="#00c6fb"
+        bindchange="onIconSizeChange"
+      />
+    </view>
+
+    <view class="config-item">
+      <text class="config-label">透明度: {{iconOpacity}}%</text>
+      <slider
+        min="10" max="100"
+        value="{{iconOpacity}}"
+        activeColor="#00c6fb"
+        bindchange="onIconOpacityChange"
+      />
+    </view>
+
+    <view class="config-item">
+      <text class="config-label">位置</text>
+      <picker range="{{positionOptions}}" range-key="label" bindchange="onIconPositionChange">
+        <view class="picker-value">
+          <block wx:for="{{positionOptions}}" wx:key="value">
+            <text wx:if="{{item.value === iconPosition}}">{{item.label}}</text>
+          </block>
+        </view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 操作按钮 -->
+  <view class="section action-bar" wx:if="{{imageSrc}}">
+    <button class="btn-primary" bindtap="applyWatermark" disabled="{{processing}}">
+      {{processing ? '处理中...' : '生成水印图片'}}
+    </button>
+  </view>
+
+  <!-- 结果弹窗 -->
+  <view class="result-mask" wx:if="{{showResult}}" bindtap="closeResult">
+    <view class="result-panel" catchtap="">
+      <view class="result-header">
+        <text class="result-title">处理完成</text>
+        <view class="result-close" bindtap="closeResult"><text>X</text></view>
+      </view>
+      <view class="result-image-wrap">
+        <image src="{{resultImageSrc}}" class="result-image" mode="aspectFit" bindtap="previewResult" />
+      </view>
+      <view class="result-tip"><text>点击图片可预览大图</text></view>
+      <view class="result-actions">
+        <button class="btn-save" bindtap="saveToAlbum">保存到相册</button>
+        <button class="btn-redo" bindtap="reSelectImage">处理其他图片</button>
+      </view>
+    </view>
+  </view>
+</view>

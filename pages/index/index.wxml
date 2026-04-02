@@ -1,33 +1,24 @@
-<view class="container">
+<view class="page">
+  <!-- 头部说明区域 -->
   <view class="header">
-    <text class="title">图片工具箱</text>
-    <text class="subtitle">选择你需要的图片处理工具</text>
+    <text class="header-title">图片工具箱</text>
+    <text class="header-desc">选择你需要的图片处理工具</text>
   </view>
 
-  <view class="module-list">
+  <!-- 工具卡片网格 -->
+  <view class="tool-grid">
     <view
-      class="module-card"
+      class="tool-card"
       wx:for="{{modules}}"
       wx:key="id"
       data-path="{{item.path}}"
       bindtap="onModuleTap"
     >
-      <view class="module-icon icon-{{item.icon}}">
-        <view class="icon-inner">
-          <!-- Watermark icon using CSS -->
-          <view wx:if="{{item.icon === 'watermark'}}" class="icon-watermark">
-            <view class="icon-img-placeholder"></view>
-            <view class="icon-drop"></view>
-          </view>
-        </view>
+      <view class="tool-icon" style="background: {{item.gradient}};">
+        <text class="tool-icon-text">{{item.emoji}}</text>
       </view>
-      <view class="module-info">
-        <text class="module-name">{{item.name}}</text>
-        <text class="module-desc">{{item.desc}}</text>
-      </view>
-      <view class="module-arrow">
-        <text class="arrow-text">></text>
-      </view>
+      <text class="tool-name">{{item.name}}</text>
+      <text class="tool-desc">{{item.desc}}</text>
     </view>
   </view>
 </view>
